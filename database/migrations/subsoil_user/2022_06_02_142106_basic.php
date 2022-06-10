@@ -1,0 +1,42 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('subsoil_user', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('address')->nullable();
+            $table->string('INN')->nullable();
+            $table->string('OKPO')->nullable();
+            $table->string('OKATO')->nullable();
+            $table->string('OGRN')->nullable();
+            $table->string('notes')->nullable();
+            $table->string('status')->nullable();
+            $table->integer('count_valid_licences')->nullable();
+            $table->integer('count_licences')->nullable();
+            // $table->string('ManagementCo')->nullable();
+            $table->foreignId('ManagementCo')->nullable()->constrained('subsoil_user');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('subsoil_user');
+    }
+};
