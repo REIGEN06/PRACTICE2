@@ -3,20 +3,21 @@
 namespace App\Imports;
 
 use App\Models\subsoil_user;
-use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Concerns\ToCollection;
+use Illuminate\Support\Collection;
 
-class subsoil_user_Import implements ToModel, WithHeadingRow
+class subsoil_user_Import implements ToCollection, WithHeadingRow
 {
     /**
     * @param array $row
     *
     * @return \Illuminate\Database\Eloquent\Model|null
     */
-    public function model(array $row)
+    public function collection(Collection $rows)
     {
-        // dd($row);
+        foreach ($rows as $row) {
         $subsoil_user = subsoil_user::firstOrCreate([
             'name' =>$row['nazvanie'],
             'address' => $row['poctovyi_adres'],
@@ -29,10 +30,17 @@ class subsoil_user_Import implements ToModel, WithHeadingRow
             'count_licences' => $row['kolicestvo_licenzii'],
             'count_valid_licences' => $row['kolicestvo_deistvuiushhix_licenzii'],
         ]);
-        
-        $subsoil_management = subsoil_user::where('ManagementCo')
-        ->update(['ManagementCo' => DB::table ('subsoil_user')
-        ->where('name', $row['upravliaiushhaia_kompaniia'])
-        ->value('id')]);
+        } 
+        foreach ($rows as $row) {
+            $company_id = DB::table ('subsoil_user')->where('name', $row['upravliaiushhaia_kompaniia'])->value('id');
+            
+            $subsoil_management = subsoil_user::where('name', $row['nazvanie'])->update(['ManagementCo' => $company_id]);
+
+            //старый вариант тут 
+            // $subsoil_management = subsoil_user::where('ManagementCo',)
+            // ->update(['ManagementCo' => DB::table ('subsoil_user')
+            // ->where('name', $row['upravliaiushhaia_kompaniia'])
+            // ->value('id')]);
+        }
     }
 }
