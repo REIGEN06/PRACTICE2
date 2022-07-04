@@ -26,15 +26,6 @@ class ExcelController extends Controller
         Excel::import($import, 'file.xlsx');
         return redirect('/')->with('success', 'All good!');
     }
-
-    // public function import_licence_area() 
-    // {
-    //     $import = new List_Import();
-    //     $import->onlySheets('Лицензионный участок');
-    //     Excel::import($import, 'file.xlsx');
-    //     return redirect('/')->with('success', 'All good!');
-    // }
-
     public function import_licence() 
     {
         $import = new List_Import();

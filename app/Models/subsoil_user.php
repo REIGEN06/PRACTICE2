@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class subsoil_user extends Model
 {
     use HasFactory;
-    public $timestamps = false;
+    // public $timestamps = false;
     protected $table = "subsoil_user";
     protected $fillable = [
            'name',

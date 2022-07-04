@@ -27,6 +27,7 @@ return new class extends Migration
             $table->integer('count_licences')->nullable();
             // $table->string('ManagementCo')->nullable();
             $table->foreignId('ManagementCo')->nullable()->constrained('subsoil_user');
+            $table->timestamps();
         });
     }
 

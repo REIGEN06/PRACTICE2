@@ -5,14 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class field extends Model
+class field_subject_rf extends Model
 {
     use HasFactory;
     public $timestamps = false;
-    protected $table = "field";
+    protected $table = "field_subject_rf";
     protected $fillable = [
-        'name',
-        'degree_of_development',
-        'polygon',
+        'field_id',
+        'subject_rf_id',
     ];
 }

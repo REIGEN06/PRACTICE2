@@ -16,12 +16,12 @@ return new class extends Migration
         Schema::create('licence', function (Blueprint $table) {
             $table->id();
             $table->string('series');
-            $table->string('number')->unique();
+            $table->string('number');
             $table->string('view');
             $table->date('date_of_receiving');
             $table->date('date_of_expiration');
             $table->date('date_of_annulment');
-            $table->string('polygon');
+            $table->text('polygon')->nullable();
             $table->foreignId('previous_licence_id')->nullable()->constrained('licence');
             $table->foreignId('subsoil_user_id')->nullable()->constrained('subsoil_user');
             $table->foreignId('licence_area_id')->nullable()->constrained('licence_area');

@@ -13,11 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('field', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('degree_of_development');
-            $table->text('polygon')->nullable();;
+        Schema::create('field_subject_rf', function (Blueprint $table) {
+            $table->foreignId('field_id')->nullable()->constrained('field');
+            $table->foreignId('subject_rf_id')->nullable()->constrained('subject_rf');
         });
     }
 
@@ -28,6 +26,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('field');
+        Schema::dropIfExists('field_subject_rf');
     }
 };

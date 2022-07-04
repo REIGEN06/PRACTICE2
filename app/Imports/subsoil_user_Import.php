@@ -32,15 +32,12 @@ class subsoil_user_Import implements ToCollection, WithHeadingRow
         ]);
         } 
         foreach ($rows as $row) {
-            $company_id = DB::table ('subsoil_user')->where('name', $row['upravliaiushhaia_kompaniia'])->value('id');
+            $company_id = DB::table ('subsoil_user')
+            ->where('name', $row['upravliaiushhaia_kompaniia'])
+            ->value('id');
             
-            $subsoil_management = subsoil_user::where('name', $row['nazvanie'])->update(['ManagementCo' => $company_id]);
-
-            //старый вариант тут 
-            // $subsoil_management = subsoil_user::where('ManagementCo',)
-            // ->update(['ManagementCo' => DB::table ('subsoil_user')
-            // ->where('name', $row['upravliaiushhaia_kompaniia'])
-            // ->value('id')]);
+            $subsoil_management = subsoil_user::where('name', $row['nazvanie'])
+            ->update(['ManagementCo' => $company_id]);
         }
     }
 }

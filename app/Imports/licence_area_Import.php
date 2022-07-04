@@ -15,7 +15,6 @@ class licence_area_Import implements ToModel, WithHeadingRow
     */
     public function model(array $row)
     {
-        dd($row);
         $licence_area = licence_status::firstOrCreate([
             'name' =>$row['status_licenzii']
         ]);

@@ -19,17 +19,17 @@ class field_Import implements ToCollection, WithHeadingRow
     */
     public function collection(Collection $rows)
     {
-        // foreach ($rows as $row) {
-        //     $field = field::firstOrCreate([
-        //     'name' => rtrim(explode('(',$row['mestorozdenie_deistvuiushhie_licenzii'])[0]),
-        //     'degree_of_development'=> $row['stepen_osvoeniia'],
-        //     // 'polygon' => $row['geom_geometrymultipolygon'],
-        // ]);
-        // }
+        foreach ($rows as $row) {
+            $field = field::firstOrCreate([
+            'name' => rtrim(explode('(',$row['mestorozdenie_deistvuiushhie_licenzii'])[0]),
+            'degree_of_development'=> $row['stepen_osvoeniia'],
+        ]);
+            // $field->fillable->polygon = $row['geom_geometrymultipolygon'];
+            // dd($field->fillable->polygon);
+        }
 
             
         // foreach ($rows as $row) {
-        //     // dd($row);
         //     $field_id = DB::table('field')
         //     ->where('name', rtrim(explode('(',$row['mestorozdenie_deistvuiushhie_licenzii'])[0]))
         //     ->value('id');
@@ -43,27 +43,27 @@ class field_Import implements ToCollection, WithHeadingRow
         //     'subject_rf_id' => $subject_id,
         // ]);
         // }
-            set_time_limit(360);
-        foreach ($rows as $row) {
-            $field_id = DB::table('field')
-            ->where('name', rtrim(explode('(',$row['mestorozdenie_deistvuiushhie_licenzii'])[0]))
-            ->value('id');
+        //     set_time_limit(360);
+        // foreach ($rows as $row) {
+        //     $field_id = DB::table('field')
+        //     ->where('name', rtrim(explode('(',$row['mestorozdenie_deistvuiushhie_licenzii'])[0]))
+        //     ->value('id');
             
-            foreach(preg_split('/\r\n|\r|\n/', $row['licenzionnye_ucastki']) as $licence_area) {
+        //     foreach(preg_split('/\r\n|\r|\n/', $row['licenzionnye_ucastki']) as $licence_area) {
                 
-                if($licence_area == '') break; 
+        //         if($licence_area == '') break; 
                 
-                $licence_area = rtrim(explode('(', $licence_area)[0]);
+        //         $licence_area = rtrim(explode('(', $licence_area)[0]);
                 
-                $licence_area_id = DB::table('licence_area')
-                ->where('name', $licence_area)
-                ->value('id');
+        //         $licence_area_id = DB::table('licence_area')
+        //         ->where('name', $licence_area)
+        //         ->value('id');
 
-                $field_licence_area = field_licence_area::firstOrCreate([
-                    'field_id' => $field_id,
-                    'licence_area_id' => $licence_area_id,
-                    ]);
-            }
-        }
+        //         $field_licence_area = field_licence_area::firstOrCreate([
+        //             'field_id' => $field_id,
+        //             'licence_area_id' => $licence_area_id,
+        //             ]);
+        //     }
+        // }
     }
 }

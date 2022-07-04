@@ -16,7 +16,6 @@ class List_Import implements WithMultipleSheets
         return [
             'Недропользователь (компания)' => new subsoil_user_Import(),
             'Лицензия' => new licence_Import(),
-            // 'Лицензионный участок' => new licence_area_Import(),//не использую, потому что в листе с лицензионными участками участки одни те же, просто лицензии разные (млечный например)
             'Месторождение' => new field_Import(),
             'Субъект РФ' => new subject_rf_Import(),
         ];

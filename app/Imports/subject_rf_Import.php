@@ -32,35 +32,5 @@ class subject_rf_Import implements ToModel, WithHeadingRow
             'shortname' =>$row['nazvanie_korotkoe'],
             'federal_district_id' =>DB::table ('federal_district')->where('name', $row['federalnyi_okrug'])->value('id')
         ]);
-
-        // $name = [
-        //     'name' =>$row['federalnyi_okrug']
-        // ];
-
-        // $name2 = [
-        //     'name' =>$row['nazvanie'],
-        //     'shortname' =>$row['nazvanie_korotkoe']
-        // ];
-
-        // $validator = Validator::make($name,federal_district::rules());
-        // if($validator->fails()) {
-        //     return null;
-        // }
-        // else {
-        //     federal_district::create($name);
-        // }
-
-        // // dd($name2); //не доходит до сюда
-
-        // $validator2 = Validator::make($name2,subject_rf::rules());
-        // if($validator2->fails()) {
-        //     return null;
-        // }
-        // else {
-        //     subject_rf::create($name2);
-        // }
-        
     }
-    
-    
 }
