@@ -5441,35 +5441,40 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+var axios = (__webpack_require__(/*! axios */ "./node_modules/axios/index.js")["default"]);
+
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  mounted: function mounted() {
-    console.log('Component mounted.');
-  },
   name: 'app',
   data: function data() {
     return {
-      root: {
-        name: 'Tree',
-        children: [{
-          name: 'music',
-          children: [{
-            name: 'song.mp3'
-          }]
-        }, {
-          name: 'workspace',
-          children: [{
-            name: 'source.js'
-          }]
-        }]
-      }
+      licences_condition: []
     };
+  },
+  mounted: function mounted() {
+    this.GetLicencesCondition();
+  },
+  methods: {
+    GetLicencesCondition: function GetLicencesCondition() {
+      var _this = this;
+
+      axios.get('/export/licences_condition').then(function (response) {
+        console.log(response);
+        _this.licences_condition = response;
+      })["catch"](function (error) {
+        console.error(error);
+      });
+    }
   },
   components: {
     Multipane: vue_multipane__WEBPACK_IMPORTED_MODULE_0__.Multipane,
     MultipaneResizer: vue_multipane__WEBPACK_IMPORTED_MODULE_0__.MultipaneResizer,
-    TreeBrowser: _TreeBrowser__WEBPACK_IMPORTED_MODULE_1__["default"]
+    TreeBrowser: _TreeBrowser__WEBPACK_IMPORTED_MODULE_1__["default"] // PerfectScrollbar,
+
   }
 });
 
@@ -5542,10 +5547,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_MultipaneComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/MultipaneComponent */ "./resources/js/components/MultipaneComponent.vue");
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
+ // import PerfectScrollbar from 'vue3-perfect-scrollbar';
+// import 'vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css';
 
 window.Vue = (__webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js")["default"]);
 Vue.component('import-component', (__webpack_require__(/*! ./components/ImportComponent.vue */ "./resources/js/components/ImportComponent.vue")["default"]));
-Vue.component('multipane-component', _components_MultipaneComponent__WEBPACK_IMPORTED_MODULE_0__["default"]);
+Vue.component('multipane-component', _components_MultipaneComponent__WEBPACK_IMPORTED_MODULE_0__["default"]); // Vue.component('perfect-scrollbar', PerfectScrollbar);
+
 var app = new Vue({
   el: '#app'
 });
@@ -28856,28 +28864,24 @@ var render = function () {
           _c("div", [
             _c("h6", { staticClass: "title is-6" }, [_vm._v("Лицензии")]),
             _vm._v(" "),
-            _c(
-              "a",
-              {
-                staticClass: "btn btn-success",
-                attrs: { href: "/export/subsoil_user", role: "button" },
-              },
-              [_vm._v("Загрузить")]
-            ),
-            _vm._v(" "),
             _c("p", { staticClass: "subtitle is-6" }, [_vm._v("[ПОИСК]")]),
             _vm._v(" "),
             _c("p", [
-              _c(
-                "small",
-                [
-                  _c("strong", [_vm._v("[ФИЛЬТР]")]),
-                  _c("br"),
-                  _vm._v(" "),
-                  _c("TreeBrowser", { attrs: { node: _vm.root } }),
-                ],
-                1
-              ),
+              _c("small", [
+                _c("strong", [_vm._v("[ФИЛЬТР]")]),
+                _c("br"),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "Licence_condition" },
+                  _vm._l(_vm.licences_condition, function (licence_condition) {
+                    return _c("ul", { key: licence_condition.id }, [
+                      _c("p", [_vm._v(_vm._s(licence_condition))]),
+                    ])
+                  }),
+                  0
+                ),
+              ]),
             ]),
           ]),
         ]

@@ -1,16 +1,19 @@
+
 <template>
   <Multipane class="vertical-panes" layout="vertical">
   <div class="pane" :style="{ minWidth: '150px', width: '200px', maxWidth: '300px' }">
     <div>
       <h6 class="title is-6">Лицензии</h6>
-      <a class="btn btn-success" href="/export/subsoil_user" role="button">Загрузить</a>
       <p class="subtitle is-6">[ПОИСК]</p>
       <p>
         <small>
           <strong>[ФИЛЬТР]</strong><br/>
-          <TreeBrowser
-            :node = "root"
-          />
+          <div class="Licence_condition">
+            <ul v-for="licence_condition in licences_condition" :key="licence_condition.id">
+                <p>{{licence_condition}}</p>
+            </ul>
+          <!-- <TreeBrowser/> -->
+          </div>
         </small>
       </p>
     </div>
@@ -31,43 +34,42 @@
 </template>
 
 <script>
+const axios = require('axios').default;
 import { Multipane, MultipaneResizer } from 'vue-multipane';
 import TreeBrowser from './TreeBrowser';
 
 export default {
-  mounted() {
-    console.log('Component mounted.')
-  },
   name: 'app',
   data() {
-    return {
-      root: {
-        name: 'Tree',
-        children: [
-          {
-            name: 'music',
-            children: [
-              {
-                name:'song.mp3'
-              }
-            ]
-          },
-          {
-            name: 'workspace',
-            children: [
-              {
-                name: 'source.js'
-              }
-            ]
-          }
-        ]
-      }
+    return{
+      licences_condition: []
     }
+  },
+  mounted()
+  {
+    this.GetLicencesCondition();
+  },
+  methods:{
+    GetLicencesCondition(){
+      axios
+    .get('/export/licences_condition')
+    .then((response) => 
+      {
+        console.log(response);
+        this.licences_condition = response;
+      })
+      .catch((error) => 
+      {
+        console.error(error);
+      });
+    }
+
   },
   components: {
     Multipane,
     MultipaneResizer,
-    TreeBrowser
+    TreeBrowser,
+    // PerfectScrollbar,
   }
 }
 </script>
