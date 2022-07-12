@@ -1,11 +1,6 @@
 <template>
 <div class="main">
     <h6 class="title is-4">Состояние лицензии -> Недропользователь -> Лицензионный участок</h6>
-    <div class="btn-group" role="group">
-        <button type="button" class="btn btn-secondary" id="licenceId">Лицензия</button>
-        <button type="button" class="btn btn-secondary" id="developId">Разработка</button>
-        <button type="button" class="btn btn-secondary" id="documentID">Документы</button>
-    </div>
     <table class="table table-hover table-striped">
         <tbody>
             <tr><td>Лицензионный участок</td><td>ПРИМЕР</td></tr>
@@ -41,7 +36,4 @@ export default {
 </script>
 
 <style>
-.table{
-
-}
 </style>

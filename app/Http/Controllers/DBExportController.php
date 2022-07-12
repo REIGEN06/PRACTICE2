@@ -19,6 +19,12 @@ class DBExportController extends Controller
         return $this->sendResponse($result->toArray(), 'users');
     }
 
+	public function exportLicence(Request $request)
+    {
+        $result = DB::table('licence')->get();
+        return $this->sendResponse($result->toArray(), 'licence');
+    }
+
 	public function searchUser(Request $request, $search)
     {
         $result = DB::table('subsoil_user')

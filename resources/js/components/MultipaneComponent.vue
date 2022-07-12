@@ -5,7 +5,7 @@
     <div>
       <h6 class="title is-4">Лицензии</h6>
       <SearchComponent/>
-      <TreeBrowser/>
+      <TreeBuilder/>
     </div>
   </div>
   <multipane-resizer></multipane-resizer>
@@ -17,7 +17,7 @@
 
 <script>
 import { Multipane, MultipaneResizer } from 'vue-multipane';
-import TreeBrowser from './TreeBrowser';
+import TreeBuilder from './TreeBuilder';
 import SearchComponent from './SearchComponent.vue';
 import ViewComponent from './ViewComponent';
 
@@ -25,7 +25,7 @@ export default {
   components: {
     Multipane,
     MultipaneResizer,
-    TreeBrowser,
+    TreeBuilder,
     SearchComponent,
     ViewComponent,
   }
