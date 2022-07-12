@@ -1,28 +1,33 @@
 <template>
     <div>
-        <div 
-            @click="expanded = !expanded"
-            :style="{'margin-left': `${depth * 20}px`}"
-            class="node">
-            <span 
-            v-if="hasChildren"
-            class="type">{{expanded ? '&#9660;' : '&#9658;'}}</span>
-            <span class="type" v-else>&#9671;</span>
-            {{node.name}}
-        </div>
-        <TreeBrowser
-            v-if="expanded"
-            v-for="child in node.children"
-            :key="child.name"
-            :node="child"
-            :depth="depth + 1"
-        />
+      <TreeLicenceCondition
+      :node = root
+      />
     </div>
 </template>
 
 <script>
+const axios = require('axios').default;
+import TreeLicenceCondition from './TreeLicenceCondition';
+
 export default {
     name: 'TreeBrowser',
+    components:{
+      TreeLicenceCondition
+    },
+
+    data(){
+      return{
+        condition: [],
+        users: [],
+        root:{
+          name:'Состояние лицензии',
+          id:0,
+          nodes: [],
+        }
+      }
+    },
+
     props:{
         node: Object,
         depth: {
@@ -30,16 +35,39 @@ export default {
             default: 0,
         }
     },
-    data() {
-        return {
-            expanded:false,
-        }
+
+    mounted()
+  {
+    this.GetLicencesCondition();
+    this.GetSubsoilUsers();
+  },
+
+  methods:{
+    GetLicencesCondition(){
+      axios
+    .get('/export/licences_condition')
+    .then((response) => 
+      {
+        this.condition = response.data.data;
+         for(let i = 0; i < this.condition.length; i++){
+            let currentNode = {name: this.condition[i].condition, id: this.condition[i].id, message: response.data.message, nodes: []}
+            this.root.nodes.push(currentNode)
+      }})
     },
-    computed: {
-        hasChildren() {
-            return this.node.children;
-        }
-    }
+    GetSubsoilUsers(){
+      axios
+    .get('/export/subsoil_users')
+    .then((response) => 
+      {
+        this.users = response.data.data;
+        
+         for(let i = 0; i < this.users.length; i++){
+            let currentNode = {name: this.users[i].name, id: this.users[i].id, message: response.data.message, nodes: []}
+            this.root.nodes.push(currentNode)
+      }})
+    },
+  },
+
 }
 </script>
 
