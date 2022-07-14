@@ -19,12 +19,11 @@ export default {
     data(){
       return{
         condition: [],
-        users: [],
-        licence: [],
         root:{
           name:'Состояние лицензии',
           id:0,
           nodes: [],
+          message:'root',
         }
       }
     },
@@ -40,7 +39,6 @@ export default {
     mounted()
   {
     this.GetLicence();
-    this.GetUsers();
   },
 
   methods:{
@@ -56,23 +54,7 @@ export default {
           }
       })
     },
-
-    GetUsers(){
-      axios
-    .get('/export/subsoil_user')
-    .then((response) =>
-    {
-      this.users = response.data.data;
-
-      for(let i = 0; i < this.users.length; i++)
-        {
-            let currentNode = {name: this.users[i].name, id: this.users[i].id, status: this.users[i].status, message: response.data.message, nodes: []}
-            this.root.nodes[0].nodes.push(currentNode)
-        }
-    })
-      
-      }
-    }
+  }
 }
 </script>
 

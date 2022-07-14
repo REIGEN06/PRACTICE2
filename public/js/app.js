@@ -5465,6 +5465,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   //заново отрисовывать
   //поиск по недропользователям -> нет -> поиск по лицензионным участкам
@@ -5478,11 +5480,13 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     GetSearch: function GetSearch(search) {
-      var _this = this;
-
-      axios.get("/search=".concat(search)).then(function (resolve) {
-        _this.searchArray = resolve.data.data;
-        console.log(_this.searchArray);
+      axios.get("/search", {
+        params: {
+          name: search
+        }
+      }).then(function (resolve) {
+        // this.searchArray = resolve.data.data;
+        console.log(resolve.data);
       });
     }
   }
@@ -5529,12 +5533,35 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      expanded: false
+      expanded: false,
+      users: []
     };
   },
   computed: {
     hasChildren: function hasChildren() {
       if (this.node.nodes.length != 0) return true;
+    }
+  },
+  methods: {
+    GetUsers: function GetUsers(id, message) {
+      var _this = this;
+
+      axios.get("/export/child?id=".concat(id, "?message=").concat(message)).then(function (response) {
+        if (response.message = 'users') {
+          _this.users = response.data.data;
+
+          for (var i = 0; i < _this.users.length; i++) {
+            var currentNode = {
+              name: _this.users[i].name,
+              id: _this.users[i].id,
+              message: response.data.message,
+              nodes: []
+            };
+
+            _this.root.nodes[id].nodes.push(currentNode);
+          }
+        }
+      });
     }
   }
 });
@@ -5572,12 +5599,11 @@ var axios = (__webpack_require__(/*! axios */ "./node_modules/axios/index.js")["
   data: function data() {
     return {
       condition: [],
-      users: [],
-      licence: [],
       root: {
         name: 'Состояние лицензии',
         id: 0,
-        nodes: []
+        nodes: [],
+        message: 'root'
       }
     };
   },
@@ -5590,7 +5616,6 @@ var axios = (__webpack_require__(/*! axios */ "./node_modules/axios/index.js")["
   },
   mounted: function mounted() {
     this.GetLicence();
-    this.GetUsers();
   },
   methods: {
     GetLicence: function GetLicence() {
@@ -5608,25 +5633,6 @@ var axios = (__webpack_require__(/*! axios */ "./node_modules/axios/index.js")["
           };
 
           _this.root.nodes.push(currentNode);
-        }
-      });
-    },
-    GetUsers: function GetUsers() {
-      var _this2 = this;
-
-      axios.get('/export/subsoil_user').then(function (response) {
-        _this2.users = response.data.data;
-
-        for (var i = 0; i < _this2.users.length; i++) {
-          var currentNode = {
-            name: _this2.users[i].name,
-            id: _this2.users[i].id,
-            status: _this2.users[i].status,
-            message: response.data.message,
-            nodes: []
-          };
-
-          _this2.root.nodes[0].nodes.push(currentNode);
         }
       });
     }
@@ -29362,17 +29368,18 @@ var render = function () {
       },
     }),
     _vm._v(" "),
-    _c("button", { staticClass: "col-md-auto btn btn-outline-dark" }, [
-      _c(
-        "i",
-        {
-          on: {
-            click: function ($event) {
-              return _vm.GetSearch(_vm.search)
-            },
+    _c(
+      "button",
+      {
+        staticClass: "col-md-auto btn btn-outline-dark",
+        on: {
+          click: function ($event) {
+            return _vm.GetSearch(_vm.search)
           },
         },
-        [
+      },
+      [
+        _c("i", [
           _c(
             "svg",
             {
@@ -29393,9 +29400,9 @@ var render = function () {
               }),
             ]
           ),
-        ]
-      ),
-    ]),
+        ]),
+      ]
+    ),
   ])
 }
 var staticRenderFns = []
@@ -29466,9 +29473,18 @@ var render = function () {
               ),
             ]),
         _vm._v(" "),
-        _c("label", { staticClass: "text-primary" }, [
-          _vm._v("id:" + _vm._s(_vm.node.id)),
-        ]),
+        _c(
+          "label",
+          {
+            staticClass: "text-primary",
+            on: {
+              click: function ($event) {
+                return _vm.GetUsers(_vm.node.id, _vm.node.message)
+              },
+            },
+          },
+          [_vm._v("id:" + _vm._s(_vm.node.id))]
+        ),
         _vm._v(" " + _vm._s(_vm.node.name) + " \n    "),
       ]
     ),

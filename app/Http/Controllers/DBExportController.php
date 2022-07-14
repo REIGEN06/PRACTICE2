@@ -13,10 +13,23 @@ class DBExportController extends Controller
         return $this->sendResponse($result->toArray(), 'licences');
     }
 
-	public function exportSubsoilUser(Request $request)
+	public function exportChild(Request $request, $id, $message)
     {
-        $result = DB::table('subsoil_user')->get();
-        return $this->sendResponse($result->toArray(), 'users');
+        if ($message = 'licences')
+        {
+            if ($id = '1')//Аннулированная (Истечение срока)
+            {
+                $subsoil_user_id = DB::table('licence')
+                ->distinct('subsoil_user_id')
+                ->where('licence_condition_id', '1');
+
+                $result = DB::table('subsoil_user')
+                ->whereIn('id', $subsoil_user_id);
+
+                return $this->sendResponse($result->toArray(), 'users');
+            }
+        }
+        
     }
 
 	public function exportLicence(Request $request)
@@ -25,8 +38,9 @@ class DBExportController extends Controller
         return $this->sendResponse($result->toArray(), 'licence');
     }
 
-	public function searchUser(Request $request, $search)
+	public function searchUser()
     {
+        dump('nn');
         $result = DB::table('subsoil_user')
 		->where('name', 'like', '%$search%')
 		->get();
