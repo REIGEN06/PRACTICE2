@@ -5543,11 +5543,11 @@ __webpack_require__.r(__webpack_exports__);
     GetUsers: function GetUsers(node, id, message) {
       var _this = this;
 
+      // console.log(node);
       if (node.nodes.length == 0) {
         axios.get("/export/child?id=".concat(id, "&message=").concat(message)).then(function (response) {
           if (response.data.message == 'users') {
             _this.users = response.data.data;
-            console.log(_this.users);
 
             for (var i = 0; i < _this.users.length; i++) {
               var currentNode = {
@@ -5560,7 +5560,7 @@ __webpack_require__.r(__webpack_exports__);
             }
           }
 
-          if (response.message == 'licence_areas') {
+          if (response.data.message == 'licence_areas') {
             _this.areas = response.data.data;
 
             for (var _i = 0; _i < _this.areas.length; _i++) {
@@ -5570,8 +5570,7 @@ __webpack_require__.r(__webpack_exports__);
                 message: response.data.message,
                 nodes: []
               };
-
-              _this.nodes.push(_currentNode);
+              node.nodes.push(_currentNode);
             }
           }
         });

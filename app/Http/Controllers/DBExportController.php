@@ -12,14 +12,13 @@ class DBExportController extends Controller
         $result = DB::table('licence_condition')
         ->orderBy('id', 'asc')
         ->get();
-        return $this->sendResponse($result->toArray(), 'licences');
+        return $this->sendResponse($result->toArray(), 'licence_conditions');
     }
 
 	public function exportChild(Request $request)
     {
-        if ($request->message == 'licences')
+        if ($request->message == 'licence_conditions')
         {
-            
             if ($request->id == 1)//Аннулированная (Истечение срока)
             {
                 
@@ -197,13 +196,28 @@ class DBExportController extends Controller
                 return $this->sendResponse($result->toArray(), 'users');
             }
         }
-        
-    }
+        if ($request->message == 'users')
+        {
+            $licence_area_id_array = DB::table('licence')//Количество записей
+            ->select('licence_area_id')
+            ->where('subsoil_user_id', $request->id)
+            ->get();
+            
+            for ( $i=0; $i < count($licence_area_id_array);$i++)
+            {
+                $licence_area_id_array_unit = DB::table('licence')
+                ->where('subsoil_user_id', $request->id)
+                ->get()[$i]->licence_area_id; 
 
-	public function exportLicence(Request $request)
-    {
-        $result = DB::table('licence')->get();
-        return $this->sendResponse($result->toArray(), 'licence');
+                $array[]=$licence_area_id_array_unit;
+            }
+            
+            $result = DB::table('licence_area')
+            ->whereIn('id', $array)
+            ->get();
+            
+            return $this->sendResponse($result->toArray(), 'licence_areas');
+        }
     }
 
 	public function searchUser(Request $request)

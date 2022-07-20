@@ -43,6 +43,7 @@ export default {
     methods:{
         GetUsers(node ,id, message)
         {
+            // console.log(node);
             if (node.nodes.length == 0){
                 axios
                 .get(`/export/child?id=${id}&message=${message}`)
@@ -51,7 +52,7 @@ export default {
                     if (response.data.message == 'users')
                     {   
                         this.users = response.data.data;
-                        console.log(this.users);
+                        
                         for(let i = 0; i < this.users.length; i++)
                         {
                             let currentNode = {name: this.users[i].name, id: this.users[i].id, message: response.data.message, nodes: []}
@@ -60,14 +61,14 @@ export default {
                             
                         }
                     }
-                    if (response.message == 'licence_areas')
+                    if (response.data.message == 'licence_areas')
                     {
                         this.areas = response.data.data;
-
+                        
                         for(let i = 0; i < this.areas.length; i++)
                         {
                             let currentNode = {name: this.areas[i].name, id: this.areas[i].id, message: response.data.message, nodes: []}
-                            this.nodes.push(currentNode)
+                            node.nodes.push(currentNode)
                         }
                     }
                 })
