@@ -16,7 +16,5 @@ Route::get('/import/field', [ExcelController::class,'import_field']);
 Route::get('/import/licence', [ExcelController::class,'import_licence']);
 
 Route::get('/export/licences_condition', [DBExportController::class,'exportLicenceCondition']);
-Route::get('/export/child?id={id}?message={message}', [DBExportController::class,'exportChild']);
-Route::get('/export/licence', [DBExportController::class,'exportLicence']);
-
+Route::get('/export/child', [DBExportController::class,'exportChild']);
 Route::get('/search', [DBExportController::class, 'searchUser']);

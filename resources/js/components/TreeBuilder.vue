@@ -28,14 +28,6 @@ export default {
       }
     },
 
-    props:{
-        node: Object,
-        depth: {
-            type: Number,
-            default: 0,
-        }
-    },
-
     mounted()
   {
     this.GetLicence();
@@ -48,6 +40,7 @@ export default {
     .then((response) => 
       {
         this.condition = response.data.data;
+
          for(let i = 0; i < this.condition.length; i++){
             let currentNode = {name: this.condition[i].condition, id: this.condition[i].id, message: response.data.message, nodes: []}
             this.root.nodes.push(currentNode)

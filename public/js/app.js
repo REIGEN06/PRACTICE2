@@ -5464,9 +5464,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   //заново отрисовывать
   //поиск по недропользователям -> нет -> поиск по лицензионным участкам
@@ -5480,11 +5477,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     GetSearch: function GetSearch(search) {
-      axios.get("/search", {
-        params: {
-          name: search
-        }
-      }).then(function (resolve) {
+      axios.get("/search?name=".concat(search)).then(function (resolve) {
         // this.searchArray = resolve.data.data;
         console.log(resolve.data);
       });
@@ -5522,9 +5515,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'TreeBrowser',
   props: {
+    parent: Object,
     node: Object,
     depth: {
       type: Number,
@@ -5534,7 +5530,8 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       expanded: false,
-      users: []
+      users: [],
+      areas: []
     };
   },
   computed: {
@@ -5543,25 +5540,42 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
-    GetUsers: function GetUsers(id, message) {
+    GetUsers: function GetUsers(node, id, message) {
       var _this = this;
 
-      axios.get("/export/child?id=".concat(id, "?message=").concat(message)).then(function (response) {
-        if (response.message = 'users') {
-          _this.users = response.data.data;
+      if (node.nodes.length == 0) {
+        axios.get("/export/child?id=".concat(id, "&message=").concat(message)).then(function (response) {
+          if (response.data.message == 'users') {
+            _this.users = response.data.data;
+            console.log(_this.users);
 
-          for (var i = 0; i < _this.users.length; i++) {
-            var currentNode = {
-              name: _this.users[i].name,
-              id: _this.users[i].id,
-              message: response.data.message,
-              nodes: []
-            };
-
-            _this.root.nodes[id].nodes.push(currentNode);
+            for (var i = 0; i < _this.users.length; i++) {
+              var currentNode = {
+                name: _this.users[i].name,
+                id: _this.users[i].id,
+                message: response.data.message,
+                nodes: []
+              };
+              node.nodes.push(currentNode);
+            }
           }
-        }
-      });
+
+          if (response.message == 'licence_areas') {
+            _this.areas = response.data.data;
+
+            for (var _i = 0; _i < _this.areas.length; _i++) {
+              var _currentNode = {
+                name: _this.areas[_i].name,
+                id: _this.areas[_i].id,
+                message: response.data.message,
+                nodes: []
+              };
+
+              _this.nodes.push(_currentNode);
+            }
+          }
+        });
+      }
     }
   }
 });
@@ -5606,13 +5620,6 @@ var axios = (__webpack_require__(/*! axios */ "./node_modules/axios/index.js")["
         message: 'root'
       }
     };
-  },
-  props: {
-    node: Object,
-    depth: {
-      type: Number,
-      "default": 0
-    }
   },
   mounted: function mounted() {
     this.GetLicence();
@@ -29441,51 +29448,54 @@ var render = function () {
         },
       },
       [
-        _vm.hasChildren
-          ? _c("span", { staticClass: "type" }, [
-              _vm._v(_vm._s(_vm.expanded ? "▼" : "►")),
-            ])
-          : _c("span", { staticClass: "type" }, [
-              _c(
-                "svg",
-                {
-                  staticClass: "bi bi-file-earmark-binary",
-                  attrs: {
-                    xmlns: "http://www.w3.org/2000/svg",
-                    width: "16",
-                    height: "16",
-                    fill: "currentColor",
-                    viewBox: "0 0 16 16",
-                  },
-                },
-                [
-                  _c("path", {
-                    attrs: {
-                      d: "M7.05 11.885c0 1.415-.548 2.206-1.524 2.206C4.548 14.09 4 13.3 4 11.885c0-1.412.548-2.203 1.526-2.203.976 0 1.524.79 1.524 2.203zm-1.524-1.612c-.542 0-.832.563-.832 1.612 0 .088.003.173.006.252l1.559-1.143c-.126-.474-.375-.72-.733-.72zm-.732 2.508c.126.472.372.718.732.718.54 0 .83-.563.83-1.614 0-.085-.003-.17-.006-.25l-1.556 1.146zm6.061.624V14h-3v-.595h1.181V10.5h-.05l-1.136.747v-.688l1.19-.786h.69v3.633h1.125z",
-                    },
-                  }),
-                  _c("path", {
-                    attrs: {
-                      d: "M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z",
-                    },
-                  }),
-                ]
-              ),
-            ]),
-        _vm._v(" "),
         _c(
-          "label",
+          "div",
           {
-            staticClass: "text-primary",
             on: {
               click: function ($event) {
-                return _vm.GetUsers(_vm.node.id, _vm.node.message)
+                return _vm.GetUsers(_vm.node, _vm.node.id, _vm.node.message)
               },
             },
           },
-          [_vm._v("id:" + _vm._s(_vm.node.id))]
+          [
+            _vm.hasChildren
+              ? _c("span", { staticClass: "type" }, [
+                  _vm._v(_vm._s(_vm.expanded ? "▼" : "►")),
+                ])
+              : _c("span", { staticClass: "type" }, [
+                  _c(
+                    "svg",
+                    {
+                      staticClass: "bi bi-file-earmark-binary",
+                      attrs: {
+                        xmlns: "http://www.w3.org/2000/svg",
+                        width: "16",
+                        height: "16",
+                        fill: "currentColor",
+                        viewBox: "0 0 16 16",
+                      },
+                    },
+                    [
+                      _c("path", {
+                        attrs: {
+                          d: "M7.05 11.885c0 1.415-.548 2.206-1.524 2.206C4.548 14.09 4 13.3 4 11.885c0-1.412.548-2.203 1.526-2.203.976 0 1.524.79 1.524 2.203zm-1.524-1.612c-.542 0-.832.563-.832 1.612 0 .088.003.173.006.252l1.559-1.143c-.126-.474-.375-.72-.733-.72zm-.732 2.508c.126.472.372.718.732.718.54 0 .83-.563.83-1.614 0-.085-.003-.17-.006-.25l-1.556 1.146zm6.061.624V14h-3v-.595h1.181V10.5h-.05l-1.136.747v-.688l1.19-.786h.69v3.633h1.125z",
+                        },
+                      }),
+                      _c("path", {
+                        attrs: {
+                          d: "M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z",
+                        },
+                      }),
+                    ]
+                  ),
+                ]),
+            _vm._v(" "),
+            _c("label", { staticClass: "text-primary" }, [
+              _vm._v("id:" + _vm._s(_vm.node.id)),
+            ]),
+            _vm._v(" " + _vm._s(_vm.node.name) + " \n        "),
+          ]
         ),
-        _vm._v(" " + _vm._s(_vm.node.name) + " \n    "),
       ]
     ),
     _vm._v(" "),
