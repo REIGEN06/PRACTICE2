@@ -5517,10 +5517,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'TreeBrowser',
   props: {
-    parent: Object,
     node: Object,
     depth: {
       type: Number,
@@ -5537,6 +5537,9 @@ __webpack_require__.r(__webpack_exports__);
   computed: {
     hasChildren: function hasChildren() {
       if (this.node.nodes.length != 0) return true;
+    },
+    isArea: function isArea() {
+      if (this.node.message == 'licence_areas') return true;
     }
   },
   methods: {
@@ -5544,8 +5547,14 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       // console.log(node);
+      if (message == 'licence_areas') {
+        GetInfo(node, id, message);
+        return;
+      }
+
       if (node.nodes.length == 0) {
         axios.get("/export/child?id=".concat(id, "&message=").concat(message)).then(function (response) {
+          //фильтрация на состояние лицензии (добавить лицензию в скобках)
           if (response.data.message == 'users') {
             _this.users = response.data.data;
 
@@ -5575,6 +5584,8 @@ __webpack_require__.r(__webpack_exports__);
           }
         });
       }
+    },
+    GetInfo: function GetInfo(node, id, message) {//взаимодействие элементов
     }
   }
 });
@@ -10797,7 +10808,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".vertical-panes[data-v-31f8f987] {\n  width: 100%;\n  height: 1000px;\n  border: 1px solid #ccc;\n}\n.vertical-panes > .pane[data-v-31f8f987] {\n  text-align: left;\n  padding: 15px;\n  overflow: hidden;\n  background: #eee;\n}\n.vertical-panes > .pane ~ .pane[data-v-31f8f987] {\n  border-left: 1px solid #ccc;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".vertical-panes[data-v-31f8f987] {\n  width: 100%;\n  height: 2000px;\n  border: 1px solid #ccc;\n}\n.vertical-panes > .pane[data-v-31f8f987] {\n  text-align: left;\n  padding: 15px;\n  overflow: hidden;\n  background: #eee;\n}\n.vertical-panes > .pane ~ .pane[data-v-31f8f987] {\n  border-left: 1px solid #ccc;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -10821,7 +10832,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.node[data-v-e26c90e2]{\n    text-align: left;\n}\n.type[data-v-e26c90e2]{\n    margin-right: 5px;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.node[data-v-e26c90e2]{\n    text-align: left;\n}\n.node[data-v-e26c90e2]:hover{\n    background: gold;\n}\n.type[data-v-e26c90e2]{\n    margin-right: 5px;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -29461,7 +29472,10 @@ var render = function () {
               ? _c("span", { staticClass: "type" }, [
                   _vm._v(_vm._s(_vm.expanded ? "▼" : "►")),
                 ])
-              : _c("span", { staticClass: "type" }, [
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.isArea
+              ? _c("span", { staticClass: "type" }, [
                   _c(
                     "svg",
                     {
@@ -29487,7 +29501,12 @@ var render = function () {
                       }),
                     ]
                   ),
-                ]),
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            !_vm.hasChildren && !_vm.isArea
+              ? _c("span", { staticClass: "type" }, [_vm._v("►")])
+              : _vm._e(),
             _vm._v(" "),
             _c("label", { staticClass: "text-primary" }, [
               _vm._v("id:" + _vm._s(_vm.node.id)),

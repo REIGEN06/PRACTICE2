@@ -209,13 +209,28 @@ class DBExportController extends Controller
                 ->where('subsoil_user_id', $request->id)
                 ->get()[$i]->licence_area_id; 
 
-                $array[]=$licence_area_id_array_unit;
+                $area_array[]=$licence_area_id_array_unit;
+
+                $licence_id_array_unit = DB::table('licence')
+                ->select(DB::raw('CONCAT(series, number, view) as licence'))
+                ->where('subsoil_user_id', $request->id)
+                ->get()[$i];
+
+                $licence_array[]=$licence_id_array_unit;
+            }
+
+            $licence_area = DB::table('licence_area')
+            ->whereIn('id', $area_array)
+            ->get();
+
+            for ( $i=0; $i < count($licence_area);$i++)
+            {
+                $licence_area[$i]->name = $licence_area[$i]->name . ' ' . '(' . $licence_array[$i]->licence . ')';
+                $licence_area[$i]->licence = $licence_array[$i]->licence;
             }
             
-            $result = DB::table('licence_area')
-            ->whereIn('id', $array)
-            ->get();
-            
+            $result = $licence_area;
+
             return $this->sendResponse($result->toArray(), 'licence_areas');
         }
     }

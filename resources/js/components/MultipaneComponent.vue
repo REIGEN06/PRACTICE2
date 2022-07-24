@@ -35,7 +35,7 @@ export default {
 <style lang="scss" scoped>
   .vertical-panes {
   width: 100%;
-  height: 1000px;
+  height: 2000px;
   border: 1px solid #ccc;
 }
 .vertical-panes > .pane {
