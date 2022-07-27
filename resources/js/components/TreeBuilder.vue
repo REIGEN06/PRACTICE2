@@ -9,7 +9,6 @@
 <script>
 const axios = require('axios').default;
 import TreeBrowser from './TreeBrowser';
-
 export default {
     name: 'TreeBuilder',
     components:{

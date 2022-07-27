@@ -11,9 +11,9 @@
     },
     "dependencies": {
         "element-ui": "^2.15.9",
+        "simplebar-vue": "^1.6.9",
         "vue": "^2.6.14",
-        "vue-multipane": "^0.9.5",
-        "vue3-perfect-scrollbar": "^1.6.0"
+        "vue-multipane": "^0.9.5"
     },
     "devDependencies": {
         "@popperjs/core": "^2.10.2",

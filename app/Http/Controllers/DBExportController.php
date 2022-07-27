@@ -115,7 +115,7 @@ class DBExportController extends Controller
             if ($licence->previous_licence_id != null){
                 $prev_licence = $this->addPreviousLicence($licence);
                 $licence->prev_licences[]=$prev_licence;
-                
+                $licence->initial_time=$prev_licence->date_of_receiving;
                 while ($prev_licence->previous_licence_id != null)
                 {
                     $prev_licence = $this->addPreviousLicence($prev_licence);

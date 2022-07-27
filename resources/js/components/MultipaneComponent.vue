@@ -1,11 +1,13 @@
 
 <template>
   <Multipane class="vertical-panes" layout="vertical">
-  <div class="pane" :style="{ minWidth: '150px', width: '300px', maxWidth: '400px' }">
+  <div class="pane" :style="{ minWidth: '150px', width: '300px', maxWidth: '500px' }">
     <div>
       <h6 class="title is-4">Лицензии</h6>
       <SearchComponent/>
-      <TreeBuilder/>
+      <simplebar class="test" data-simplebar-auto-hide="false">
+        <TreeBuilder/>
+      </simplebar>
     </div>
   </div>
   <multipane-resizer></multipane-resizer>
@@ -20,7 +22,8 @@ import { Multipane, MultipaneResizer } from 'vue-multipane';
 import TreeBuilder from './TreeBuilder';
 import SearchComponent from './SearchComponent.vue';
 import ViewComponent from './ViewComponent';
-
+import simplebar from 'simplebar-vue';
+import 'simplebar/dist/simplebar.min.css';
 export default {
   components: {
     Multipane,
@@ -28,14 +31,18 @@ export default {
     TreeBuilder,
     SearchComponent,
     ViewComponent,
+    simplebar,
   }
 }
 </script>
 
 <style lang="scss" scoped>
+  .test {
+  height: 900px;
+  }
   .vertical-panes {
   width: 100%;
-  height: 2000px;
+  height: 1000px;
   border: 1px solid #ccc;
 }
 .vertical-panes > .pane {

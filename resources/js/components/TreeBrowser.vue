@@ -91,7 +91,10 @@ export default {
         text-align: left;
     }
     .node:hover{
-        background: gold;
+        background: #FFE28D;
+        border: solid gold;
+        border-left: 0px;
+        border-right: 0px;
     }
     .type{
         margin-right: 5px;
