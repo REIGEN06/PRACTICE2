@@ -48,7 +48,6 @@ export default {
     methods:{
         GetUsers(node, id, message, condition)
         {
-            // console.log(this.node);
             if (node.nodes.length == 0){
                 axios
                 .get(`/export/child?id=${id}&message=${message}&condition=${condition}`)

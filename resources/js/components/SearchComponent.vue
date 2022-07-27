@@ -8,22 +8,30 @@
 </template>
 
 <script>
+import {bus} from '../../main';
 export default {
-  //заново отрисовывать
-  //поиск по недропользователям -> нет -> поиск по лицензионным участкам
-  //поиск сразу по недропользователям и лицензионным участкам
   data(){
     return{
-      search: 'Поиск',
-      searchArray:[],
+      search: 'СМР01574НП',
+      searched: Object,
     }
   },
-  methods: {
+  methods: {//Поиск только по лицензии
           GetSearch(search){
-          axios.get(`/search?name=${search}`)
-            .then(resolve => {
-              // this.searchArray = resolve.data.data;
-              console.log(resolve.data);
+          axios
+          .get(`/search?name=${search}`)
+            .then((response) => 
+            {
+              if (response.data.message == 'notSearched')
+              {
+                this.search = 'Лицензия не найдена';
+              }
+              else
+              {
+                this.searched = response.data.data;
+                this.search = '';
+                bus.$emit('licenceCard', this.searched);
+              }
             })
           },
     }

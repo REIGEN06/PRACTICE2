@@ -160,11 +160,72 @@ class DBExportController extends Controller
         return $prev_licence;
     }
 	public function searchUser(Request $request)
-    {
-        $result = DB::table('subsoil_user')
-		->where('name', 'like', '%$search%')
-		->get();
-        return $this->sendResponse($result->toArray(), 'users');
+    {//проверка на существование лицензии
+        $licence = DB::table('licence')
+        ->where(DB::raw('concat (series, number, view)'), $request->name)
+        ->get();
+        
+        if (isset($licence[0]) == false){
+            $result = null;
+            return $this->sendResponse($result, 'notSearched');
+        };
+
+        $licence = DB::table('licence')
+        ->where(DB::raw('concat (series, number, view)'), $request->name)
+        ->get()[0];
+
+        $licence_area = DB::table('licence_area')
+        ->select('name')
+        ->where('id', $licence->licence_area_id)
+        ->get()[0];
+        
+        $licence_status = DB::table('licence_status')
+        ->select('status')
+        ->where('id', $licence->licence_status_id)
+        ->get()[0];
+
+        $type_of_main_mineral = DB::table('type_of_main_mineral')
+        ->select('name')
+        ->where('id', $licence->type_of_main_mineral_id)
+        ->get()[0];
+
+        $user = DB::table('subsoil_user')
+        ->where('id', $licence->subsoil_user_id)
+        ->get()[0];
+
+        $condition = DB::table('licence_condition')
+        ->where('id', $licence->licence_condition_id)
+        ->get()[0];
+
+        $licence->condition = $condition->condition;
+
+        $licence->licence_number = $licence->series . $licence->number . $licence->view;
+
+        $licence->initial_time = $licence->date_of_receiving;
+
+        if ($licence->previous_licence_id != null){
+            $prev_licence = $this->addPreviousLicence($licence);
+            $licence->prev_licences[]=$prev_licence;
+            $licence->initial_time=$prev_licence->date_of_receiving;
+            while ($prev_licence->previous_licence_id != null)
+            {
+                $prev_licence = $this->addPreviousLicence($prev_licence);
+                $licence->prev_licences[]=$prev_licence;
+                $licence->initial_time=$prev_licence->date_of_receiving;
+            }
+        }
+        
+        $result = $licence;
+
+        $result->licence_area = $licence_area->name;
+
+        $result->licence_status = $licence_status->status;
+
+        $result->type_of_main_mineral = $type_of_main_mineral->name;
+        
+        $result->name = $user->name;
+        
+        return $this->sendResponse($result, 'searched');
     }
 
 	public function sendResponse($result, $message) {

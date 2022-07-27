@@ -8094,6 +8094,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _main__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../main */ "./resources/main.js");
 //
 //
 //
@@ -8103,21 +8104,27 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  //заново отрисовывать
-  //поиск по недропользователям -> нет -> поиск по лицензионным участкам
-  //поиск сразу по недропользователям и лицензионным участкам
   data: function data() {
     return {
-      search: 'Поиск',
-      searchArray: []
+      search: 'СМР01574НП',
+      searched: Object
     };
   },
   methods: {
+    //Поиск только по лицензии
     GetSearch: function GetSearch(search) {
-      axios.get("/search?name=".concat(search)).then(function (resolve) {
-        // this.searchArray = resolve.data.data;
-        console.log(resolve.data);
+      var _this = this;
+
+      axios.get("/search?name=".concat(search)).then(function (response) {
+        if (response.data.message == 'notSearched') {
+          _this.search = 'Лицензия не найдена';
+        } else {
+          _this.searched = response.data.data;
+          _this.search = '';
+          _main__WEBPACK_IMPORTED_MODULE_0__.bus.$emit('licenceCard', _this.searched);
+        }
       });
     }
   }
@@ -8187,7 +8194,6 @@ __webpack_require__.r(__webpack_exports__);
     GetUsers: function GetUsers(node, id, message, condition) {
       var _this = this;
 
-      // console.log(this.node);
       if (node.nodes.length == 0) {
         axios.get("/export/child?id=".concat(id, "&message=").concat(message, "&condition=").concat(condition)).then(function (response) {
           if (response.data.message == 'users') {
@@ -8386,13 +8392,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_MultipaneComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/MultipaneComponent */ "./resources/js/components/MultipaneComponent.vue");
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
- // import PerfectScrollbar from 'vue3-perfect-scrollbar';
-// import 'vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css';
 
 window.Vue = (__webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js")["default"]);
 Vue.component('import-component', (__webpack_require__(/*! ./components/ImportComponent.vue */ "./resources/js/components/ImportComponent.vue")["default"]));
-Vue.component('multipane-component', _components_MultipaneComponent__WEBPACK_IMPORTED_MODULE_0__["default"]); // Vue.component('perfect-scrollbar', PerfectScrollbar);
-
+Vue.component('multipane-component', _components_MultipaneComponent__WEBPACK_IMPORTED_MODULE_0__["default"]);
 var app = new Vue({
   el: '#app'
 });
