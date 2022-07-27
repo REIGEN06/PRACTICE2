@@ -19,222 +19,146 @@ class DBExportController extends Controller
     {
         if ($request->message == 'licence_conditions')
         {
-            if ($request->id == 1)//Аннулированная (Истечение срока)
+            $subsoil_user_id_array = DB::table('licence')//Количество записей
+            ->select('subsoil_user_id')
+            ->distinct('subsoil_user_id')
+            ->where('licence_condition_id', $request->id)
+            ->get();
+
+            for ( $i=0; $i < count($subsoil_user_id_array);$i++)
             {
-                
-                $subsoil_user_id_array = DB::table('licence')//Количество записей
+                $subsoil_user_id_array_unit = DB::table('licence')
                 ->select('subsoil_user_id')
                 ->distinct('subsoil_user_id')
-                ->where('licence_condition_id', '1')
-                ->get();
+                ->where('licence_condition_id', $request->id)
+                ->get()[$i]->subsoil_user_id; 
 
-                for ( $i=0; $i < count($subsoil_user_id_array);$i++)
-                {
-                    $subsoil_user_id_array_unit = DB::table('licence')
-                    ->select('subsoil_user_id')
-                    ->distinct('subsoil_user_id')
-                    ->where('licence_condition_id', '1')
-                    ->get()[$i]->subsoil_user_id; 
-
-                    $array[]=$subsoil_user_id_array_unit;
-                }
-
-                $result = DB::table('subsoil_user')
-                ->whereIn('id', $array)
-                ->get();
-                
-                return $this->sendResponse($result->toArray(), 'users');
+                $array[]=$subsoil_user_id_array_unit;
             }
-            if ($request->id == 2)//Действующая
+            $result = DB::table('subsoil_user')
+            ->whereIn('id', $array)
+            ->get();
+
+            for ( $i=0; $i < count($result);$i++)
             {
-                $subsoil_user_id_array = DB::table('licence')//Количество записей
-                ->select('subsoil_user_id')
-                ->distinct('subsoil_user_id')
-                ->where('licence_condition_id', '2')
-                ->get();
-
-                for ( $i=0; $i < count($subsoil_user_id_array);$i++)
-                {
-                    $subsoil_user_id_array_unit = DB::table('licence')
-                    ->select('subsoil_user_id')
-                    ->distinct('subsoil_user_id')
-                    ->where('licence_condition_id', '2')
-                    ->get()[$i]->subsoil_user_id; 
-
-                    $array[]=$subsoil_user_id_array_unit;
-                }
-
-                $result = DB::table('subsoil_user')
-                ->whereIn('id', $array)
-                ->get();
-
-                return $this->sendResponse($result->toArray(), 'users');
+                $result[$i]->condition = $request->id;
             }
-            if ($request->id == 3)//Аннулированная (Переоформленная)
-            {
-                $subsoil_user_id_array = DB::table('licence')//Количество записей
-                ->select('subsoil_user_id')
-                ->distinct('subsoil_user_id')
-                ->where('licence_condition_id', '3')
-                ->get();
-
-                for ( $i=0; $i < count($subsoil_user_id_array);$i++)
-                {
-                    $subsoil_user_id_array_unit = DB::table('licence')
-                    ->select('subsoil_user_id')
-                    ->distinct('subsoil_user_id')
-                    ->where('licence_condition_id', '3')
-                    ->get()[$i]->subsoil_user_id; 
-
-                    $array[]=$subsoil_user_id_array_unit;
-                }
-
-                $result = DB::table('subsoil_user')
-                ->whereIn('id', $array)
-                ->get();
-
-                return $this->sendResponse($result->toArray(), 'users');
-            }
-            if ($request->id == 4)//Аннулированная (Прочая)
-            {
-                $subsoil_user_id_array = DB::table('licence')//Количество записей
-                ->select('subsoil_user_id')
-                ->distinct('subsoil_user_id')
-                ->where('licence_condition_id', '4')
-                ->get();
-
-                for ( $i=0; $i < count($subsoil_user_id_array);$i++)
-                {
-                    $subsoil_user_id_array_unit = DB::table('licence')
-                    ->select('subsoil_user_id')
-                    ->distinct('subsoil_user_id')
-                    ->where('licence_condition_id', '4')
-                    ->get()[$i]->subsoil_user_id; 
-
-                    $array[]=$subsoil_user_id_array_unit;
-                }
-
-                $result = DB::table('subsoil_user')
-                ->whereIn('id', $array)
-                ->get();
-
-                return $this->sendResponse($result->toArray(), 'users');
-            }
-            if ($request->id == 5)//Аннулированная (Нарушение условий лицензирования)
-            {
-                $subsoil_user_id_array = DB::table('licence')//Количество записей
-                ->select('subsoil_user_id')
-                ->distinct('subsoil_user_id')
-                ->where('licence_condition_id', '5')
-                ->get();
-
-                for ( $i=0; $i < count($subsoil_user_id_array);$i++)
-                {
-                    $subsoil_user_id_array_unit = DB::table('licence')
-                    ->select('subsoil_user_id')
-                    ->distinct('subsoil_user_id')
-                    ->where('licence_condition_id', '5')
-                    ->get()[$i]->subsoil_user_id; 
-
-                    $array[]=$subsoil_user_id_array_unit;
-                }
-
-                $result = DB::table('subsoil_user')
-                ->whereIn('id', $array)
-                ->get();
-
-                return $this->sendResponse($result->toArray(), 'users');
-            }
-            if ($request->id == 6)//Аннулированная (Отказ владельца)
-            {
-                $subsoil_user_id_array = DB::table('licence')//Количество записей
-                ->select('subsoil_user_id')
-                ->distinct('subsoil_user_id')
-                ->where('licence_condition_id', '6')
-                ->get();
-
-                for ( $i=0; $i < count($subsoil_user_id_array);$i++)
-                {
-                    $subsoil_user_id_array_unit = DB::table('licence')
-                    ->select('subsoil_user_id')
-                    ->distinct('subsoil_user_id')
-                    ->where('licence_condition_id', '6')
-                    ->get()[$i]->subsoil_user_id; 
-
-                    $array[]=$subsoil_user_id_array_unit;
-                }
-
-                $result = DB::table('subsoil_user')
-                ->whereIn('id', $array)
-                ->get();
-
-                return $this->sendResponse($result->toArray(), 'users');
-            }
-            if ($request->id == 7)//Аннулированная (Ликвидация предприятия)
-            {
-                $subsoil_user_id_array = DB::table('licence')//Количество записей
-                ->select('subsoil_user_id')
-                ->distinct('subsoil_user_id')
-                ->where('licence_condition_id', '7')
-                ->get();
-
-                for ( $i=0; $i < count($subsoil_user_id_array);$i++)
-                {
-                    $subsoil_user_id_array_unit = DB::table('licence')
-                    ->select('subsoil_user_id')
-                    ->distinct('subsoil_user_id')
-                    ->where('licence_condition_id', '7')
-                    ->get()[$i]->subsoil_user_id; 
-
-                    $array[]=$subsoil_user_id_array_unit;
-                }
-
-                $result = DB::table('subsoil_user')
-                ->whereIn('id', $array)
-                ->get();
-
-                return $this->sendResponse($result->toArray(), 'users');
-            }
+            
+            return $this->sendResponse($result->toArray(), 'users');
         }
+        
         if ($request->message == 'users')
         {
-            $licence_area_id_array = DB::table('licence')//Количество записей
-            ->select('licence_area_id')
+            
+            $licence_id_array = DB::table('licence')//Количество записей
             ->where('subsoil_user_id', $request->id)
+            ->where('licence_condition_id', $request->condition)
             ->get();
             
-            for ( $i=0; $i < count($licence_area_id_array);$i++)
+            for ( $i=0; $i < count($licence_id_array);$i++)
             {
-                $licence_area_id_array_unit = DB::table('licence')
+                $licence = DB::table('licence')
                 ->where('subsoil_user_id', $request->id)
-                ->get()[$i]->licence_area_id; 
+                ->where('licence_condition_id', $request->condition)
+                ->get()[$i]; 
 
-                $area_array[]=$licence_area_id_array_unit;
+                $licence->licence_number = $licence->series . $licence->number . $licence->view;
+                
+                $licence_area_name = DB::table('licence_area')
+                ->where('id', $licence->licence_area_id)
+                ->get()[0]->name; 
 
-                $licence_id_array_unit = DB::table('licence')
-                ->select(DB::raw('CONCAT(series, number, view) as licence'))
-                ->where('subsoil_user_id', $request->id)
-                ->get()[$i];
-
-                $licence_array[]=$licence_id_array_unit;
+                $licence->name = $licence_area_name . ' ' . '(' . $licence->licence_number . ')';
+                
+                $licence_array[] = $licence;
             }
-
+            
+            $result = $licence_array;
+            
+            return $this->sendResponse($result, 'licence');
+        }
+        if ($request->message == 'licence')
+        {
+            $licence = DB::table('licence')
+            ->where('id', $request->id)
+            ->get()[0];
+            
             $licence_area = DB::table('licence_area')
-            ->whereIn('id', $area_array)
-            ->get();
+            ->select('name')
+            ->where('id', $licence->licence_area_id)
+            ->get()[0];
+            
+            $licence_status = DB::table('licence_status')
+            ->select('status')
+            ->where('id', $licence->licence_status_id)
+            ->get()[0];
 
-            for ( $i=0; $i < count($licence_area);$i++)
-            {
-                $licence_area[$i]->name = $licence_area[$i]->name . ' ' . '(' . $licence_array[$i]->licence . ')';
-                $licence_area[$i]->licence = $licence_array[$i]->licence;
+            $type_of_main_mineral = DB::table('type_of_main_mineral')
+            ->select('name')
+            ->where('id', $licence->type_of_main_mineral_id)
+            ->get()[0];
+
+            $user = DB::table('subsoil_user')
+            ->where('id', $licence->subsoil_user_id)
+            ->get()[0];
+
+            $condition = DB::table('licence_condition')
+            ->where('id', $licence->licence_condition_id)
+            ->get()[0];
+
+            $licence->condition = $condition->condition;
+
+            $licence->licence_number = $licence->series . $licence->number . $licence->view;
+
+            $licence->initial_time = $licence->date_of_receiving;
+
+            if ($licence->previous_licence_id != null){
+                $prev_licence = $this->addPreviousLicence($licence);
+                $licence->prev_licences[]=$prev_licence;
+                
+                while ($prev_licence->previous_licence_id != null)
+                {
+                    $prev_licence = $this->addPreviousLicence($prev_licence);
+                    $licence->prev_licences[]=$prev_licence;
+                    $licence->initial_time=$prev_licence->date_of_receiving;
+                }
             }
             
-            $result = $licence_area;
+            $result = $licence;
 
-            return $this->sendResponse($result->toArray(), 'licence_areas');
+            $result->licence_area = $licence_area->name;
+
+            $result->licence_status = $licence_status->status;
+
+            $result->type_of_main_mineral = $type_of_main_mineral->name;
+            
+            $result->name = $user->name;
+            
+            return $this->sendResponse($result, 'licence_card');
         }
     }
+    public function addPreviousLicence($licence)
+    {
+        $prev_licence = DB::table('licence')
+        ->where('id', $licence->previous_licence_id)
+        ->get()[0];
 
+        $user = DB::table('subsoil_user')
+        ->where('id', $prev_licence->subsoil_user_id)
+        ->get()[0];
+
+        $condition = DB::table('licence_condition')
+        ->where('id', $prev_licence->licence_condition_id)
+        ->get()[0];
+
+        $prev_licence->name = $user->name;
+
+        $prev_licence->condition = $condition->condition;
+
+        $prev_licence->licence_number = $prev_licence->series . $prev_licence->number . $prev_licence->view;
+
+        return $prev_licence;
+    }
 	public function searchUser(Request $request)
     {
         $result = DB::table('subsoil_user')

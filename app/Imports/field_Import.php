@@ -25,7 +25,7 @@ class field_Import implements ToCollection, WithHeadingRow
             'degree_of_development'=> $row['stepen_osvoeniia'],
             ]);
         }
-
+        set_time_limit(360);
         foreach ($rows as $row) {
             $field_id = DB::table('field')
             ->where('name', rtrim(explode('(',$row['mestorozdenie_deistvuiushhie_licenzii'])[0]))

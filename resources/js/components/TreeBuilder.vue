@@ -22,6 +22,7 @@ export default {
         root:{
           name:'Состояние лицензии',
           id:0,
+          condition:0,
           nodes: [],
           message:'root',
         }
@@ -42,7 +43,7 @@ export default {
         this.condition = response.data.data;
 
          for(let i = 0; i < this.condition.length; i++){
-            let currentNode = {name: this.condition[i].condition, id: this.condition[i].id, message: response.data.message, nodes: []}
+            let currentNode = {name: this.condition[i].condition, id: this.condition[i].id, message: response.data.message, condition: this.condition[i].id, nodes: []}
             this.root.nodes.push(currentNode)
           }
       })
